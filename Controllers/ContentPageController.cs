@@ -13,16 +13,20 @@ namespace RestApi.Controllers
     public class ContentPageController : ControllerBase
     {
         [HttpGet]
-        public string Get()
+        public string Get(string url)
         {
+            
+
             var sql = new CreatorSql();
-            return sql.request("select cm.module from page p " +
-                                    "LEFT JOIN content_page cp " +
-                                    "on cp.page_id = p.content_page_id " +
-                                    "LEFT JOIN content_module cm " +
-                                    "on cp.content_module_id = cm.id " +
+
+
+            return sql.request2("SELECT cb.block, cm.module_id FROM page p " +
+                                    "left join content_page cp on p.content_page_id = cp.page_id " +
+                                    "left join content_module cm on cm.module_id = cp.content_module_id " +
+                                    "left join content_block cb on cb.id = cm.block_id " +
                                     "where " +
-                                    "p.id = 1;");
+                                    "p.url =  '"+ url + "' " +
+                                    "group by cm.block_id;");
 
         }
     }
